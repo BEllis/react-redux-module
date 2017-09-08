@@ -4,7 +4,7 @@
   "description": "A react component for loading modules into redux using the redux-modules-enhancer package.",
   "main": "lib/ReduxModule.js",
   "scripts": {
-    "clean": "rm -r lib",
+    "clean": "rm -r -f lib",
     "compile": "npm run clean && babel --presets es2015,stage-0 -d lib/ src/ && minify lib/*.js",
     "test": "npm run compile && mocha --compilers js:babel-core/register --reporter spec",
     "prepare": "npm run compile"
