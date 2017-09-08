@@ -4,10 +4,12 @@
   "description": "A react component for loading modules into redux using the redux-modules-enhancer package.",
   "main": "lib/ReduxModule.js",
   "scripts": {
-    "compile": "babel --presets es2015,stage-0 -d lib/ src/",
+    "clean": "rm -r lib",
+    "compile": "npm run clean && babel --presets es2015,stage-0 -d lib/ src/ && minify lib/*.js",
     "test": "npm run compile && mocha --compilers js:babel-core/register --reporter spec",
-    "prepublish": "npm run compile"
+    "prepare": "npm run compile"
   },
+  "repository": "https://github.com/BEllis/react-redux-module.git",
   "keywords": [
     "redux",
     "react",
@@ -23,6 +25,7 @@
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
     "chai": "^4.1.2",
+    "minifier": "^0.8.1",
     "mocha": "^3.5.0",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
