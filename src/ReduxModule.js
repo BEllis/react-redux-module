@@ -6,17 +6,30 @@ const storeShape = PropTypes.shape({
   getState: PropTypes.func.isRequired
 })
 
-// <ReduxModule moduleId="my-module" reducer={ myModuleReducer } initialState={ myModuleInitialState } middlewares={ [ myModuleMiddlware1, myModuleMiddlware2 ] } />
+// <ReduxModule moduleId="my-module" reducer={ myModuleReducer } initialState={ myModuleInitialState } middleware={ [ myModuleMiddlware1, myModuleMiddlware2 ] } />
+// or
+// <ReduxModule module={myModule} />
 const ReduxModule = function(props, context) {
-  let store = context.store;
-  let module = props.module;
-  if (!store.hasModule(props.moduleId)) {
-    let middlewares = props.middlewares;
-    if (middlewares instanceof Function) {
-      middlewares = [ middlewares ];
+  const store = context.store;
+  const module = props.module;
+  let moduleId;
+  if (module !== undefined) {
+    moduleId = module.moduleId;
+  } else {
+    moduleId = props.moduleId;
+  }
+
+  if (!store.hasModule(moduleId)) {
+    let middleware = props.middlewares;
+    if (middleware instanceof Function) {
+      middleware = [ middleware ];
     }
-    
-    store.addModule(props.moduleId, props.reducer, props.initialState, ...middlewares);
+
+    if (module !== undefined) {
+      store.addModule(module);
+    } else {
+      store.addModule(props.moduleId, props.reducer, props.initialState, ...middleware);
+    }
   }
 
   return null;

@@ -1,5 +1,11 @@
 # React Redux Module
 
+## IMPORTANT NOTICE
+
+*Experimental* I didn't realise publishing this package to NPM would cause so many downloads. This package is still experimental so I would not currently recommend it for production use yet though I intend for it to production ready in the coming days.
+
+Some middleware may not work with this library as all actions are pushed through each middleware in each module, so some middleware may not handle this scenario gracefully, though thunks and redux-observable have been tested.
+
 ## Motivation
 
 Having to compile a list of possible reducers, state and/or middleware ahead-of-time is
@@ -15,7 +21,7 @@ In order to avoid polluting JSX code with boilerplate code for adding modules su
 class MyComponent extends Component {
   constructor(props, context) {
     super(props, context);
-    this.context.store.add(myModuleId, moduleReducer, moduleState, moduleMiddlewares);
+    this.context.store.add(myModule);
   }
 
   ...
@@ -37,7 +43,7 @@ class MyComponent extends Component {
   render() {
     return
       <div>
-        <ReduxModule moduleId={module.id} reducer={module.reducer} initialState={module.initialState} middlewares={module.middlewars} />
+        <ReduxModule module={module} />
         ...
       </div>
   }
@@ -84,7 +90,7 @@ class MyComponent extends Component {
   render() {
     return
       <div>
-        <ReduxModule moduleId={module.id} reducer={module.reducer} initialState={module.initialState} middlewares={module.middlewars} />
+        <ReduxModule module={module} />
         ...
       </div>
   }
