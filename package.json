@@ -4,8 +4,8 @@
   "description": "A react component for loading modules into redux using the redux-modules-enhancer package.",
   "main": "lib/ReduxModule.js",
   "scripts": {
-    "clean": "rm -r -f lib",
-    "compile": "npm run clean && babel --presets es2015,stage-0 -d lib/ src/ && minify lib/*.js",
+    "clean": "rm -r -f dist",
+    "compile": "npm run clean && ./node_modules/.bin/webpack -p && ./node_modules/.bin/webpack -d --output-filename react-redux-module.js",
     "test": "npm run compile && mocha --compilers js:babel-core/register --reporter spec",
     "prepare": "npm run compile",
     "prepublishOnly": "git push --tags && git push"
@@ -22,6 +22,7 @@
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
     "babel-plugin-transform-react-jsx": "^6.24.1",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
@@ -31,7 +32,8 @@
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
     "react-redux": "^5.0.6",
-    "redux": "^3.7.2"
+    "redux": "^3.7.2",
+    "webpack": "^3.5.6"
   },
   "dependencies": {
     "prop-types": "15.5.10",
