@@ -1,3 +1,4 @@
+import React from "react";
 import PropTypes from "prop-types";
 
 const storeShape = PropTypes.shape({
@@ -6,37 +7,39 @@ const storeShape = PropTypes.shape({
   getState: PropTypes.func.isRequired
 })
 
-// <ReduxModule moduleId="my-module" reducer={ myModuleReducer } initialState={ myModuleInitialState } middleware={ [ myModuleMiddlware1, myModuleMiddlware2 ] } />
-// or
-// <ReduxModule module={myModule} />
-const ReduxModule = function(props, context) {
-  const store = context.store;
-  const module = props.module;
-  let moduleId;
-  if (module !== undefined) {
-    moduleId = module.moduleId;
-  } else {
-    moduleId = props.moduleId;
-  }
+export function connectModules(modulesFactory, ChildComponent) {
+  class ModuleDependantComponent extends React.Component {
+    constructor(props, context) {
+      super(props, context);
+      this.store = context.store;
 
-  if (!store.hasModule(moduleId)) {
-    let middleware = props.middlewares;
-    if (middleware instanceof Function) {
-      middleware = [ middleware ];
+      if (this.store === undefined) {
+        throw new Error("Missing require 'store' on context.");
+      }
     }
 
-    if (module !== undefined) {
-      store.addModule(module);
-    } else {
-      store.addModule(props.moduleId, props.reducer, props.initialState, ...middleware);
+    componentWillMount() {
+      let modules = modulesFactory(this.props);
+      if (!(modules instanceof Array)) {
+        modules = [ modules ];
+      }
+
+      for (let i = 0; i < modules.length; i++) {
+        const module = modules[i];
+        if (!this.store.hasModule(module)) {
+          this.store.addModule(module);
+        }
+      }
+    }
+
+    render() {
+      return React.createElement(ChildComponent, this.props, this.children);
     }
   }
 
-  return null;
+  ModuleDependantComponent.contextTypes = {
+    store: storeShape.isRequired,
+  }
+
+  return ModuleDependantComponent;
 };
-
-ReduxModule.contextTypes = {
-  store: storeShape.isRequired,
-}
-
-export default ReduxModule;
