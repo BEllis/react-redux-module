@@ -32,7 +32,13 @@ describe("connectModules", function() {
         return null;
       }
 
-      const WrappedComponent = connectModules((ownProps) => { return { moduleId, reducer: moduleReducer, initialState: moduleInitialState, middleware: moduleMiddleware }; }, MyComponent);
+      const moduleDefinition = {
+        moduleId,
+        options: {},
+        factory: (moduleId, options) => ({ moduleId, reducer: moduleReducer, initialState: moduleInitialState, middleware: moduleMiddleware }),
+      }
+
+      const WrappedComponent = connectModules(moduleDefinition)(MyComponent);
 
       const MY_AMAZING_ACTION = "MY_AMAZING_ACTION"
       store.dispatch({ type: MY_AMAZING_ACTION });
@@ -73,7 +79,19 @@ describe("connectModules", function() {
         return null;
       }
 
-      const WrappedComponent = connectModules((ownProps) => { return [ { moduleId, reducer: moduleReducer, initialState: moduleInitialState, middleware: moduleMiddleware }, { moduleId: "second-module-id", reducer: moduleReducer, initialState: moduleInitialState, middleware: moduleMiddleware } ]; }, MyComponent);
+      const moduleDefinition = {
+        moduleId,
+        options: {},
+        factory: (moduleId, options) => ({ moduleId, reducer: moduleReducer, initialState: moduleInitialState, middleware: moduleMiddleware }),
+      }
+
+      const moduleDefinition2 = {
+        moduleId: "second-module-id",
+        options: {},
+        factory: (moduleId, options) => ({ moduleId, reducer: moduleReducer, initialState: moduleInitialState, middleware: moduleMiddleware }),
+      }
+
+      const WrappedComponent = connectModules([ moduleDefinition, moduleDefinition2 ])(MyComponent);
 
       const MY_AMAZING_ACTION = "MY_AMAZING_ACTION"
       store.dispatch({ type: MY_AMAZING_ACTION });
@@ -113,7 +131,20 @@ describe("connectModules", function() {
         return null;
       }
 
-      const WrappedComponent = connectModules((ownProps) => { return { moduleId, reducer: moduleReducer, initialState: moduleInitialState, middleware: moduleMiddleware }; }, MyComponent);
+      const moduleDefinition = {
+        moduleId,
+        options: {},
+        factory: (moduleId, options) => ({ moduleId, reducer: moduleReducer, initialState: moduleInitialState, middleware: moduleMiddleware }),
+      }
+
+      const moduleDefinition2 = {
+        moduleId: "second-module-id",
+        options: {},
+        factory: (moduleId, options) => ({ moduleId, reducer: moduleReducer, initialState: moduleInitialState, middleware: moduleMiddleware }),
+      }
+
+      const WrappedComponent = connectModules([ moduleDefinition, moduleDefinition2 ])(MyComponent);
+
       const MY_AMAZING_ACTION = "MY_AMAZING_ACTION"
       store.dispatch({ type: MY_AMAZING_ACTION });
       expect(function() {

@@ -90,6 +90,7 @@ After that, you just wrap your component using *connectModule* and a factory met
 ```javascript
 import { ReduxModule } from "react-redux-module";
 import { connectModules } from "react-redux-module";
+import getModuleDefintion as getMyModuleDefintion from "./MyModule.js";
 
 class MyComponent extends Component {
   render() {
@@ -102,13 +103,13 @@ class MyComponent extends Component {
 
 /* ... mapStateToProps & mapDispatchToProps ... */
 
-export default connect(mapStateToProps, mapDispatchToProps, connectModules(createMyModule, MyComponent));
+export default connect(mapStateToProps, mapDispatchToProps, connectModules(getMyModuleDefintion())(MyComponent));
 ```
 
 #### MyModule.js
 ```javascript
-export default function createMyModule(options) {
-  const moduleId = options.id || "my-module";
+createMyModule(moduleId, options) => {
+  const moduleId = moduleId;
   const initialState = { /* ... initial state ... */ }
   const reducer = (state, action) => {
     // .. reducer logic ..
@@ -132,15 +133,27 @@ export default function createMyModule(options) {
     onunload,
   }
 }
+
+export const getModuleDefinition = (moduleId, options) => ({
+  moduleId: moduleId || `defaultModuleId`,
+  options: { defaultValue: 1,  ...options }
+});
+
+export default getModuleDefinition;
 ```
 
 ## API
 
 ### connectModules
 
-connectModules(modulesFactory, component)
+```javascript
+connectModules(modulesDefinitions)(component);
+```
 
-  - *modulesFactory* is a method that takes a single ownProps argument and returns either a single module object or an array of module objects.
+  - *moduleDefinitons* is an array of objects or an object containing
+    - *moduleId* The unique identifier for the module instance.
+    - *options* The options (if any) to be passed to the factory.
+    - *factory* A factory method for creating a new module instance with the signature (moduleId, options) => ReduxModuleObject;
   - *component* is the component to be wrapped that relies on the given modules being loaded.
 
   The method returns a Component that wraps the given component and will load the given modules when the component is constructed.
