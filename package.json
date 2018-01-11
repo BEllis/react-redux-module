@@ -1,8 +1,8 @@
 {
   "name": "react-redux-module",
-  "version": "1.3.1",
+  "version": "1.3.2",
   "description": "A react component for loading modules into redux using the redux-modules-enhancer package.",
-  "main": "lib/ReduxModule.js",
+  "main": "dist/react-redux-module.min.js",
   "scripts": {
     "clean": "rm -r -f dist",
     "compile": "npm run clean && ./node_modules/.bin/webpack -p && ./node_modules/.bin/webpack -d --output-filename react-redux-module.js",
