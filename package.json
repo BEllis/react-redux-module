@@ -1,6 +1,6 @@
 {
   "name": "react-redux-module",
-  "version": "1.3.2",
+  "version": "1.3.3",
   "description": "A react component for loading modules into redux using the redux-modules-enhancer package.",
   "main": "dist/react-redux-module.min.js",
   "scripts": {
